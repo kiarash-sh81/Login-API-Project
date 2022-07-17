@@ -3,7 +3,7 @@ const Joi = require('@hapi/joi');
 
 
 const UserSchema = Joi.object ({
-    username: Joi.string().min(4).required(),
+    username: Joi.string().token().min(4).required(),//username include a-z , 0-9 , underscore
     email: Joi.string().min(6).required().email(),
     password: Joi.string().min(6).required()
 });

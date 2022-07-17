@@ -1,7 +1,13 @@
 const User = require('../model/User');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const Joi = require('@hapi/joi');
+const dotenv = require('dotenv');
 const { UserSchema , loginUserSchema} = require('../utils/validationUser');
+
+
+//*config env
+dotenv.config({path : "../config/.env"});
 
 exports.register = async (req , res) =>{
 
@@ -48,7 +54,11 @@ exports.login = async (req , res) =>{
         if(Data){
             const validPass = await bcrypt.compare(Password , Data.password);
             if(validPass){
-                res.send("Valid Username And Password");
+                const UserId = Data.id;
+                const accessToken = await jwt.sign(UserId , process.env.ACCESS_TOKEN_SECRET)
+                res.send(`Valid Username And Password \n ${accessToken}`);
+
+
             }else{
                 res.send("Wrong Password!");
             }
