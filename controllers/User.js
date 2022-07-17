@@ -11,7 +11,15 @@ exports.register = async (req , res) =>{
     if(error) return res.status(400).send(error.details[0].message);
 
     //* if we dont have an error now we can make an obj and save it
-    
+    const existUser = await User.findOne({username: req.body.username});
+    const existEmail = await User.findOne({email: req.body.email});
+    if(existUser) {
+        return res.status(400).send("Sorry this username already has been taken!");
+    }
+    if(existEmail){ 
+        return res.status(400).send("Sorry this email already has been taken!");
+    }
+   
     const user = new User({
         username: req.body.username,
         email: req.body.email,
@@ -32,6 +40,7 @@ exports.login = async (req , res) =>{
     if(error)  return res.status(400).send(error.details[0].message);
     
     //* if we dont have an error now we can check username and password
+    
     try {
         const Username = req.body.username;
         const Password = req.body.password;
