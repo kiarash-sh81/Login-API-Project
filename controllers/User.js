@@ -9,6 +9,8 @@ const { UserSchema , loginUserSchema} = require('../utils/validationUser');
 //*config env
 dotenv.config({path : "../config/.env"});
 
+
+//? registering new user 
 exports.register = async (req , res) =>{
 
 
@@ -17,6 +19,8 @@ exports.register = async (req , res) =>{
     if(error) return res.status(400).send(error.details[0].message);
 
     //* if we dont have an error now we can make an obj and save it
+
+    //* checking that there is not registered account like the intered user and email
     const existUser = await User.findOne({username: req.body.username});
     const existEmail = await User.findOne({email: req.body.email});
     if(existUser) {
@@ -25,7 +29,7 @@ exports.register = async (req , res) =>{
     if(existEmail){ 
         return res.status(400).send("Sorry this email already has been taken!");
     }
-   
+   //* making new user by useing the schema
     const user = new User({
         username: req.body.username,
         email: req.body.email,
@@ -39,7 +43,9 @@ exports.register = async (req , res) =>{
         res.status(400).send(err);
     }
 }
+//? end of register
 
+//? loging user
 exports.login = async (req , res) =>{
     //* validation check
     const {error} = await loginUserSchema.validate(req.body);
@@ -50,12 +56,12 @@ exports.login = async (req , res) =>{
     try {
         const Username = req.body.username;
         const Password = req.body.password;
-        const Data = await User.findOne({username: Username});
+        const Data = await User.findOne({username: Username});//finding username
         if(Data){
-            const validPass = await bcrypt.compare(Password , Data.password);
+            const validPass = await bcrypt.compare(Password , Data.password);//compare hashed pass and intered pass
             if(validPass){
-                const UserId = Data.id;
-                const accessToken = await jwt.sign(UserId , process.env.ACCESS_TOKEN_SECRET)
+                const UserId = Data.id;//geting user id
+                const accessToken = await jwt.sign(UserId , process.env.ACCESS_TOKEN_SECRET);//making token
                 res.send(`Valid Username And Password \n ${accessToken}`);
 
 

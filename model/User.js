@@ -29,7 +29,7 @@ const UserSchema = mongoose.Schema({
     }
 });
 
-//* hashing password
+//* hashing password by bcrypt
 UserSchema.pre('save' ,async function (next) {
     try {
         const salt = await bcrypt.genSalt(10);

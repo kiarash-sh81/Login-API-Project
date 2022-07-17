@@ -11,7 +11,7 @@ const app = express();
 
 //* logging
 if(process.env.NODE_ENV === "development"){
-    app.use(morgan('Dev'));
+    app.use(morgan('dev'));
 }
 
 //* Database connection
@@ -26,6 +26,7 @@ app.use(express.json());
 //* routes
 app.use("/admin" , route);
 
+//* geting port from env
 const port = process.env.PORT;
 
 

@@ -1,4 +1,4 @@
-//* mongo db
+//* mongo db using mangoose
 const mongoose = require('mongoose');
 
 //* connecting to database
